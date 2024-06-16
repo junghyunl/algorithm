@@ -11,25 +11,21 @@ for (let i = 0; i < m; i++) {
 }
 
 function bfs(v) {
-    let bacon = new Array(n+1).fill(0);
+    let queue = [v];
+    let bacon = new Array(n+1).fill(-1);
     bacon[v] = 0;
 
-    let queue = [v];
-    let visited = new Array(n+1).fill(false);
     while (queue.length > 0) {
         const node = queue.shift();
-        if (visited[node] === true) continue;
-        visited[node] = true;
 
         for (let i of user[node]) {
-            if (visited[i] === true) continue;
-            if (bacon[i] === 0) {
+            if (bacon[i] === -1) {
                 queue.push(i);
                 bacon[i] = bacon[node] + 1;
             }
         }
     }
-    return bacon.reduce((a,b) => a+b);
+    return bacon.filter(a => a > -1).reduce((a,b) => a+b);
 }
 
 let CabinVacon = [];
