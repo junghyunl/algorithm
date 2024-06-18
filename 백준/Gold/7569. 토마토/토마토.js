@@ -8,12 +8,10 @@ for (let i = 0; i < h; i++) {
 }
 
 let queue = [];
-let unripe = 0;
 for (let i = 0; i < h; i++) {
     for (let j = 0; j < n; j++) {
         for (let k = 0; k < m; k++) {
-            if (tomato[i][j][k] === 0) unripe++;
-            else if (tomato[i][j][k] === 1) queue.push([i,j,k]);
+            if (tomato[i][j][k] === 1) queue.push([i,j,k]);
         }
     }
 }
@@ -21,9 +19,7 @@ for (let i = 0; i < h; i++) {
 const dx = [-1,1,0,0,0,0];
 const dy = [0,0,-1,1,0,0];
 const dz = [0,0,0,0,-1,1];
-
 let idx = 0;
-let maxValue = 0;
 while (queue.length > idx) {
     const [z, x, y] = queue[idx++];
 
@@ -35,10 +31,20 @@ while (queue.length > idx) {
         if (tomato[nz][nx][ny] === 0) {
             queue.push([nz,nx,ny]);
             tomato[nz][nx][ny] = tomato[z][x][y] + 1;
-            maxValue = Math.max(maxValue, tomato[z][x][y]);
-            unripe--;
         }
     }
 }
 
-console.log(unripe ? -1 : maxValue);
+let maxValue = 0;
+loop: for (let i = 0; i < h; i++) {
+    for (let j = 0; j < n; j++) {
+        for (let k = 0; k < m; k++) {
+            if (tomato[i][j][k] === 0) {
+                maxValue = -1;
+                break loop;
+            }
+            maxValue = Math.max(maxValue, tomato[i][j][k]-1);
+        }
+    }
+}
+console.log(maxValue);
