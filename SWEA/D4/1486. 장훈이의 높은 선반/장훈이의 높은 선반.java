@@ -1,21 +1,21 @@
+import java.io.*;
 import java.util.StringTokenizer;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class Solution {
-     static int N, B, answer;
-     static int[] heights;
-    public static void main(String[] args) throws IOException {
-    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
+	static int T, N, minH, res;
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static StringTokenizer st;
+	static int[] heights;
+	
+	public static void main(String[] args) throws IOException{
+		T = Integer.parseInt(br.readLine());
 		
-		int T = Integer.parseInt(br.readLine());
-		for (int tc = 1; tc <= T; tc++) {
+		for(int tc=1; tc<=T; tc++) {
 			st = new StringTokenizer(br.readLine());
 			N = Integer.parseInt(st.nextToken());
-			B = Integer.parseInt(st.nextToken());
-			answer = Integer.MAX_VALUE;
+			minH = Integer.parseInt(st.nextToken());
+			res = 200000;
+			
 			heights = new int[N];
 			
 			st = new StringTokenizer(br.readLine());
@@ -23,18 +23,20 @@ public class Solution {
 				heights[i] = Integer.parseInt(st.nextToken());
 			}
 			
-			subSet(0,0);
-			System.out.println("#" + tc + " " + (answer-B));
+			subset(0, 0);
+			System.out.println("#" + tc + " " + (res-minH));
 		}
-    }
-    
-    public static void subSet(int depth, int total) {
-		if (depth == N) {
-			if (total < B) return;
-			answer = Math.min(answer, total);
+	}
+	
+	public static void subset(int depth, int sum) {
+		if(depth==N) {
+			if(sum<minH) return;
+			if(sum<res) res = sum;
 			return;
 		}
-		subSet(depth+1, total+heights[depth]);
-		subSet(depth+1, total);
+		
+		subset(depth+1, sum); // 비선택
+		subset(depth+1, sum+heights[depth]); // 선택
 	}
+
 }
