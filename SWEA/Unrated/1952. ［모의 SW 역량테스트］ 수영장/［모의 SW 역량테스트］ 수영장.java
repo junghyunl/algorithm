@@ -2,9 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
-/*
- * 메모리: 26,380 kb		실행시간: 116 ms
- */
+
 public class Solution {
 	static int[] fee, month;
 	static int answer;
@@ -26,21 +24,21 @@ public class Solution {
 				month[i] = Integer.parseInt(st.nextToken());
 			}
 			
-			combi(0,0);
-
+			bt(0,0);
 			System.out.println("#" + tc + " " + answer);
 		}
 	}
 	
-	public static void combi(int depth, int price) {
-		if (depth >= 12) {
+	public static void bt(int depth, int price) {
+		if (price >= answer) return;
+		else if (depth >= 12) {
 			answer = Math.min(answer, price);
 			return;
 		}
-		if (month[depth] == 0) combi(depth+1, price);
+		if (month[depth] == 0) bt(depth+1, price);
 		else {
-			combi(depth+1, price + Math.min(month[depth]*fee[0], fee[1]));
-			combi(depth+3, price + fee[2]);
+			bt(depth+1, price + Math.min(month[depth]*fee[0], fee[1]));
+			bt(depth+3, price + fee[2]);
 		}
 	}
 }
