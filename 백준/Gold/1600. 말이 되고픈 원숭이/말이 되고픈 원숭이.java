@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 public class Main {
 	static int K, W, H, ans=-1;
 	static int[][] world;
-	static boolean[][][] visited;
+	static int[][] visited;
 	static final int[] hy = {-1,-2,-2,-1,1,2,2,1};
 	static final int[] hx = {-2,-1,1,2,2,1,-1,-2};
 	static final int[] dy = {-1,1,0,0};
@@ -22,7 +22,7 @@ public class Main {
 		H = Integer.parseInt(st.nextToken());
 		ans = -1;
 		world = new int[H][W];
-		visited = new boolean[H][W][K+1];
+		visited = new int[H][W];
 		for (int i = 0; i < H; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < W; j++) {
@@ -53,8 +53,8 @@ public class Main {
 				for (int i = 0; i < 8; i++) {
 					int ny = y + hy[i];
 					int nx = x + hx[i];
-					if (ny > -1 && ny < H && nx > -1 && nx < W && world[ny][nx] == 0 && !visited[ny][nx][k-1]) {
-						visited[ny][nx][k-1] = true;
+					if (ny > -1 && ny < H && nx > -1 && nx < W && world[ny][nx] == 0 && (visited[ny][nx] & 1 << k-1) == 0) {
+						visited[ny][nx] |= 1 << k-1;
 						queue.add(new Path(ny,nx,k-1,cnt+1));
 					}
 				}
@@ -63,8 +63,8 @@ public class Main {
 				int ny = y + dy[i];
 				int nx = x + dx[i];
 				
-				if (ny > -1 && ny < H && nx > -1 && nx < W && world[ny][nx] == 0 && !visited[ny][nx][k]) {
-					visited[ny][nx][k] = true;
+				if (ny > -1 && ny < H && nx > -1 && nx < W && world[ny][nx] == 0 && (visited[ny][nx] & 1 << k) == 0) {
+					visited[ny][nx] |= 1 << k;
 					queue.add(new Path(ny,nx,k,cnt+1));
 				}
 			}
