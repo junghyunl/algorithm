@@ -5,13 +5,12 @@ import java.util.StringTokenizer;
 
 public class Solution {
 	
-	static int H, W, N;
+	static int H, W, N, y, x, dr;
 	static String input;
 	static char[][] field;
 	static String tk = "<>^v", mv = "LRUD";
 	static int[] dy = {0,0,-1,1};
 	static int[] dx = {-1,1,0,0};
-	static Tank t;
 
 	public static void main(String[] args) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -29,7 +28,7 @@ public class Solution {
 				for (int j = 0; j < W; j++) {
 					field[i][j] = line.charAt(j);
 					if (tk.contains(""+field[i][j])) {
-						t = new Tank(i,j,tk.indexOf(""+field[i][j]));
+						y = i; x = j; dr = tk.indexOf(""+field[i][j]);
 					}
 				}
 			}
@@ -41,7 +40,7 @@ public class Solution {
 				if (cmd == 'S') shoot();
 				else move(cmd);
 			}
-			field[t.y][t.x] = tk.charAt(t.dr);
+			field[y][x] = tk.charAt(dr);
 			
 			System.out.print("#" + tc + " ");
 			for (int i = 0; i < H; i++) {
@@ -51,46 +50,26 @@ public class Solution {
 		}
 	}
 	public static void move(char c) {
-		int index = mv.indexOf(""+c);
-		t.setDr(index);
-		int ny = t.y + dy[index];
-		int nx = t.x + dx[index];
+		dr = mv.indexOf(c);
+		int ny = y + dy[dr];
+		int nx = x + dx[dr];
 		if (ny > -1 && ny < H && nx > -1 && nx < W && field[ny][nx] == '.') {
-			field[t.y][t.x] = '.';
-			t.setY(ny);
-			t.setX(nx);
+			field[y][x] = '.';
+			y = ny;
+			x = nx;
 		}
 	}
 	public static void shoot() {
-		int ny = t.y + dy[t.dr];
-		int nx = t.x + dx[t.dr];
+		int ny = y + dy[dr];
+		int nx = x + dx[dr];
 		while (true) {
 			if (ny < 0 || ny >= H || nx < 0 || nx >= W || field[ny][nx] == '#') break;
 			if (field[ny][nx] == '*') {
 				field[ny][nx] = '.';
 				break;
 			}
-			ny += dy[t.dr];
-			nx += dx[t.dr];
-		}
-	}
-	static class Tank {
-		int y;
-		int x;
-		int dr;
-		public Tank(int y, int x, int dr) {
-			this.y = y;
-			this.x = x;
-			this.dr = dr;
-		}
-		public void setY(int y) {
-			this.y = y;
-		}
-		public void setX(int x) {
-			this.x = x;
-		}
-		public void setDr(int dr) {
-			this.dr = dr;
+			ny += dy[dr];
+			nx += dx[dr];
 		}
 	}
 }
