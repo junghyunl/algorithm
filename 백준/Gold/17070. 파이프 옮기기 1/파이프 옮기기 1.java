@@ -28,11 +28,10 @@ public class Main {
 	
 	public static void dfs(int y, int x, int dr) {
 		for (int i = 0; i < 3; i++) {
-			if(Math.abs(dr - i) >= 2) continue;
+			if(Math.abs(dr - i) == 2) continue;
 			int ny = y + dy[i];
 			int nx = x + dx[i];
-			if (ny >= N || nx >= N || house[ny][nx] == -1) continue;
-			if (i == 1 && (house[ny-1][nx] == -1 || house[ny][nx-1] == -1)) continue;
+			if (ny >= N || nx >= N || house[ny][nx] == -1 || (i == 1 && (house[ny-1][nx] == -1 || house[ny][nx-1] == -1))) continue;
 			house[ny][nx]++;
 			dfs(ny, nx, i);
 		}
