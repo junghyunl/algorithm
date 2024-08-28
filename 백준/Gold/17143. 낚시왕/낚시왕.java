@@ -1,17 +1,15 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 public class Main {
 	
 	static int R, C, dt, ans;
-	static int[][] map;
 	static int[] d = {-1,1,1,-1};
-	static TreeMap<Integer, Shark> sharks;
+	static Shark[][] map;
+	static ArrayList<Shark> sharks;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -20,8 +18,8 @@ public class Main {
 		C = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
 		
-		map = new int[R][C];
-		sharks = new TreeMap<>(Comparator.reverseOrder());
+		map = new Shark[R][C];
+		sharks = new ArrayList<>();
 		
 		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(in.readLine());
@@ -30,10 +28,11 @@ public class Main {
 			int s = Integer.parseInt(st.nextToken());
 			int d = Integer.parseInt(st.nextToken())-1;
 			int z = Integer.parseInt(st.nextToken());
-			Shark shark = new Shark(r, c, s, d);
-			map[r][c] = z;
-			sharks.put(z, shark);
+			Shark shark = new Shark(r, c, s, d, z);
+			map[r][c] = shark;
+			sharks.add(shark);
 		}
+		sharks.sort((a,b)->a.size-b.size);
 		for (int i = 0; i < C; i++) {
 			fishing(i);
 			move();
@@ -42,34 +41,32 @@ public class Main {
 	}
 	public static void fishing(int c) {				
 		for (int i = 0; i < R; i++) {
-			if (map[i][c] > 0) {
-				ans += map[i][c];
+			if (map[i][c] != null) {
+				ans += map[i][c].size;
 				sharks.remove(map[i][c]);
-				map[i][c] = 0;
 				return;
 			}
 		}
 	}
 	public static void move() {					
-		map = new int[R][C];
-		TreeSet<Integer> keys = new TreeSet<>(Comparator.reverseOrder());
-		keys.addAll(sharks.keySet());
-		for (int z : keys) {
-			Shark s = sharks.get(z);
+		map = new Shark[R][C];
+		for (int i = sharks.size()-1; i >= 0; i--) {
+			Shark s = sharks.get(i);
 			s.setPosition();
-			if(map[s.r][s.c] == 0) map[s.r][s.c] = z;
+			if(map[s.r][s.c] == null) map[s.r][s.c] = s;
 			else {
-				sharks.remove(z);
+				sharks.remove(i);
 			}
 		}
 	}
 	static class Shark {
-		int r, c, speed, dr;
-		public Shark(int r, int c, int speed, int dr) {
+		int r, c, speed, dr, size;
+		public Shark(int r, int c, int speed, int dr, int size) {
 			this.r = r;
 			this.c = c;
 			this.speed = speed;
 			this.dr = dr;
+			this.size = size;
 		}
 		public void setPosition() {
 			if (dr < 2) {
