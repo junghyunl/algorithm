@@ -28,7 +28,7 @@ public class Solution {
 				if (op == 0) {
 					union(a, b);
 				}else {
-					if (findSet(a) == findSet(b)) ans += "1";
+					if (find(a) == find(b)) ans += "1";
 					else ans += "0";
 				}
 			}
@@ -42,15 +42,16 @@ public class Solution {
 			parents[i] = i;
 		}
 	}
-	public static int findSet(int a) {
+	public static int find(int a) {
 		if (a == parents[a]) return a;
-		return parents[a] = findSet(parents[a]);
+		return parents[a] = find(parents[a]);
 	}
 	public static boolean union(int a, int b) {
-		int ar = findSet(a);
-		int br = findSet(b);
+		int ar = find(a);
+		int br = find(b);
 		if (ar == br) return false;
-		parents[br] = ar;
+		if (ar > br) parents[ar] = br;
+		else parents[br] = ar;
 		return true;
 	}
 }
