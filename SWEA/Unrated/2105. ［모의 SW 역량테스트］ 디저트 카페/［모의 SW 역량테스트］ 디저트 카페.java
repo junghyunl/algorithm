@@ -39,6 +39,7 @@ public class Solution {
 		}
 	}
 	static void dfs(int r, int c, int d, int cnt) {
+		if (d == 3 && cnt <= ans/2) return;
 		if (r == sr && c == sc && cnt > 0) {
 			ans = Math.max(ans, cnt);
 			return;
