@@ -52,21 +52,18 @@ public class Main {
 			int cur = q.poll();
 			
 			for (Edge e : edges[cur]) {
-				baseCount(cur, e);
+				for (int b : base) {
+					cnt[e.v][b] += e.weight*cnt[cur][b];
+				}
 				if (--degree[e.v] == 0) q.offer(e.v);
 			}
 		}
 			
 		StringBuilder ans = new StringBuilder();
 		for (int b : base) {
-			ans.append(b + " " + cnt[N][b] + "\n");
+			ans.append(b).append(" ").append(cnt[N][b]).append("\n");
 		}
 		System.out.println(ans);
-	}
-	static void baseCount(int from, Edge e) {
-		for (int b : base) {
-			cnt[e.v][b] += e.weight*cnt[from][b];
-		}
 	}	
 	static class Edge {
 		int v, weight;
