@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 
 public class Main {
 	
-	static int N, ans, sn;
+	static int N, ans;
 	static int[][] map;
 	static List<Node>[] list;
 	static boolean[] visited;
@@ -35,11 +35,7 @@ public class Main {
 			}
 		}
 		
-		for (int i = 0; i < N; i++) {
-			sn = i;
-			dfs(i, 0);
-		}
-		
+		dfs(0, 0);
 		
 		System.out.println(ans);
 	}
@@ -47,7 +43,7 @@ public class Main {
 	static void dfs(int cur, int cost) {
 		if (cost >= ans) return;
 		if (visited[cur]) {
-			if (cur == sn && visitAll()) ans = Math.min(ans, cost);
+			if (cur == 0 && visitAll()) ans = Math.min(ans, cost);
 			return;
 		}
 		visited[cur] = true;
