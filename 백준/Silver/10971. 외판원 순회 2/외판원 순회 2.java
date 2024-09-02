@@ -45,6 +45,7 @@ public class Main {
 	}
 	
 	static void dfs(int cur, int cost) {
+		if (cost >= ans) return;
 		if (visited[cur]) {
 			if (cur == sn && visitAll()) ans = Math.min(ans, cost);
 			return;
