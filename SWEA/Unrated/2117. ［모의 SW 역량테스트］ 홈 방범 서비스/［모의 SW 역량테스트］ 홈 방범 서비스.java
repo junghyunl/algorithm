@@ -19,7 +19,7 @@ public class Solution {
 			N = Integer.parseInt(st.nextToken());
 			M = Integer.parseInt(st.nextToken());
 			cnt = new int[N][N][N+1];
-			ans = 0;
+			ans = 1;
 			
 			for (int i = 0; i < N; i++) {
 				st = new StringTokenizer(br.readLine());
@@ -29,7 +29,6 @@ public class Solution {
 			}
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
-					if (cnt[i][j][0] > ans && cnt[i][j][0]*M >= 1) ans = cnt[i][j][0];
 					for (int k = 1; k < N+1; k++) {
 						cnt[i][j][k] += cnt[i][j][k-1];
 						if (cnt[i][j][k] > ans && cnt[i][j][k]*M >= k*k+(k+1)*(k+1)) ans = cnt[i][j][k];
