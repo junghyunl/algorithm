@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 public class Solution {
 	
 	static int N, M, cnt, ans;
-	static boolean[][] adjMatrix;
+	static List<Integer>[] downList, upList;
 
 	public static void main(String[] args) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,14 +19,21 @@ public class Solution {
 		for (int tc = 1; tc <= T; tc++) {
 			N = Integer.parseInt(br.readLine());
 			M = Integer.parseInt(br.readLine());
-			adjMatrix = new boolean[N][N];
+			downList = new ArrayList[N];
+			upList = new ArrayList[N];
 			ans = 0;
+			
+			for (int i = 0; i < N; i++) {
+				downList[i] = new ArrayList<>();
+				upList[i] = new ArrayList<>();
+			}
 			
 			for (int i = 0; i < M; i++) {
 				st = new StringTokenizer(br.readLine());
 				int from = Integer.parseInt(st.nextToken())-1;
 				int to = Integer.parseInt(st.nextToken())-1;
-				adjMatrix[from][to] = true;
+				downList[from].add(to);
+				upList[to].add(from);
 			}
 
 			for (int i = 0; i < N; i++) {
@@ -44,8 +51,8 @@ public class Solution {
 	static void downDfs(int cur, boolean[] visited) {
 		visited[cur] = true;
 		
-		for (int i = 0; i < N; i++) {
-			if (adjMatrix[cur][i] && !visited[i]) {
+		for (int i : downList[cur]) {
+			if (!visited[i]) {
 				downDfs(i, visited);
 				cnt++;
 			}
@@ -54,8 +61,8 @@ public class Solution {
 	static void upDfs(int cur, boolean[] visited) {
 		visited[cur] = true;
 		
-		for (int i = 0; i < N; i++) {
-			if (adjMatrix[i][cur] && !visited[i]) {
+		for (int i : upList[cur]) {
+			if (!visited[i]) {
 				upDfs(i, visited);
 				cnt++;
 			}
