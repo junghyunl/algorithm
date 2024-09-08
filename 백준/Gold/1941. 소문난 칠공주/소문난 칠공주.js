@@ -3,27 +3,28 @@ const input = require('fs').readFileSync(path).toString().trim().split('\n').map
 
 const girls = input.map(a => a.split(''));
 let visited;
-let dasom = new Array(25).fill(0);
+let yArr = new Array(25).fill(0);
 const dy = [-1, 1, 0, 0];
 const dx = [0, 0, -1, 1];
 let ans = 0;
 
 for (let i = 0; i < 5; i++) {
     for (let j = 0; j < 5; j++) {
-        if (girls[i][j] === 'S') dasom[i*5+j] = 1;
+        if (girls[i][j] === 'Y') yArr[i*5+j] = 1;
     }
 }
 
 combi(0,0,0,0);
 console.log(ans);
 
-function combi(depth, start, cnt, flag) {
+function combi(depth, start, yCnt, flag) {
+    if (yCnt > 3) return;
     if(depth === 7) {
-        if(cnt > 3 && check(flag)) ans++; 
+        if(check(flag)) ans++; 
         return;
     }
     for (let i = start; i < 25; i++) {
-        combi(depth+1, i+1, cnt+dasom[i], flag|1<<i);
+        combi(depth+1, i+1, yCnt+yArr[i], flag|1<<i);
     }
 }
 
