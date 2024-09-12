@@ -9,20 +9,17 @@ import java.util.StringTokenizer;
 
 public class Main {
 	
-	static int N, Y;
-	static int[] distance;
+	static int N;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
-		List<Node>[] adjFromList = new ArrayList[N+1];
-		List<Node>[] adjtoList = new ArrayList[N+1];
+		List<Node>[] adjList = new ArrayList[N+1];
 		
 		for (int i = 0; i < N+1; i++) {
-			adjFromList[i] = new ArrayList<>();
-			adjtoList[i] = new ArrayList<>();
+			adjList[i] = new ArrayList<>();
 		}
 		
 		for (int i = 0; i < M; i++) {
@@ -31,36 +28,25 @@ public class Main {
 			int to = Integer.parseInt(st.nextToken());
 			int weight = Integer.parseInt(st.nextToken());
 			
-			adjFromList[from].add(new Node(to, weight));
-			adjtoList[to].add(new Node(from, weight));
+			adjList[from].add(new Node(to, weight));
 		}
 		
 		st = new StringTokenizer(br.readLine());
 		int X = Integer.parseInt(st.nextToken());
-		Y = Integer.parseInt(st.nextToken());
+		int Y = Integer.parseInt(st.nextToken());
 		int Z = Integer.parseInt(st.nextToken());
 		
-		int yAns = getYDistance(adjFromList, X);
-		yAns += getYDistance(adjtoList, Z);
+		int yAns = getYDistance(adjList, X, Y);
+		yAns += getYDistance(adjList, Y, Z);
 		if (yAns <= 0) yAns = -1;
 		
-		distance = new int[N+1];
-		getNotYDistance(adjFromList, X);
-		getNotYDistance(adjtoList, Z);
-		
-		int notYAns = Integer.MAX_VALUE;
-		for (int i = 1; i < Y; i++) {
-			if (distance[i] > 0) notYAns = Math.min(notYAns, distance[i]);
-		}
-		for (int i = Y+1; i < N+1; i++) {
-			if (distance[i] > 0) notYAns = Math.min(notYAns, distance[i]);
-		}
+		int notYAns = getNotYDistance(adjList, X, Y, Z);
 		if (notYAns == Integer.MAX_VALUE) notYAns = -1;
 		
 		System.out.println(yAns + " " + notYAns);
 		
 	}
-	static int getYDistance(List<Node>[] list, int start) {
+	static int getYDistance(List<Node>[] list, int start, int end) {
 		boolean[] visited = new boolean[N+1];
 		int[] minDistance = new int[N+1];
 		Arrays.fill(minDistance, Integer.MAX_VALUE);
@@ -72,7 +58,7 @@ public class Main {
 		while(!pq.isEmpty()) {
 			Node cur = pq.poll();
 			
-			if (visited[Y]) break;
+			if (visited[end]) break;
 			if (visited[cur.to]) continue;
 			visited[cur.to] = true;
 			
@@ -84,9 +70,9 @@ public class Main {
 			}
 		}
 		
-		return minDistance[Y];
+		return minDistance[end];
 	}
-	static void getNotYDistance(List<Node>[] list, int start) {
+	static int getNotYDistance(List<Node>[] list, int start, int stop, int end) {
 		boolean[] visited = new boolean[N+1];
 		int[] minDistance = new int[N+1];
 		Arrays.fill(minDistance, Integer.MAX_VALUE);
@@ -98,21 +84,19 @@ public class Main {
 		while(!pq.isEmpty()) {
 			Node cur = pq.poll();
 			
-			if(visited[cur.to]) continue;
+			if (visited[end]) break;
+			if (visited[cur.to]) continue;
 			visited[cur.to] = true;
 			
 			for (Node node : list[cur.to]) {
-				if (node.to == Y) continue;
+				if (node.to == stop) continue;
 				if (minDistance[node.to] > cur.weight + node.weight) {
 					minDistance[node.to] = cur.weight + node.weight;
 					pq.offer(new Node(node.to, minDistance[node.to]));
 				}
 			}
 		}
-		
-		for (int i = 1; i < N+1; i++) {
-			distance[i] += minDistance[i];
-		}
+		return minDistance[end];
 	}
 	static class Node {
 		int to, weight;
