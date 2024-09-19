@@ -11,25 +11,26 @@ for (let i = 0; i < N; i++) {
         else if (lab[i][j] === 2) virus.push([i, j]);
     }
 }
-const [V, W] = [virus.length, walls.length];
+const W = walls.length;
 const [dy, dx] = [[-1, 1, 0, 0], [0, 0, -1, 1]];
+const selectedWalls = Array(3);
 let copyLab = Array(N);
 let ans = 0, cnt;
 
-permutation(0);
+combi(0, 0);
 console.log(ans);
 
-function permutation(depth) {
+function combi(depth, start) {
     if (depth === 3) {
         for (let i = 0; i < N; i++) {
             copyLab[i] = lab[i].slice();
         }
         for (let i = 0; i < 3; i++) {
-            copyLab[walls[i][0]][walls[i][1]] = 1;
+            copyLab[selectedWalls[i][0]][selectedWalls[i][1]] = 1;
         }
 
-        for (let i = 0; i < V; i++) {
-            dfs(virus[i][0], virus[i][1]);
+        for (let v of virus) {
+            dfs(v[0], v[1]);
         }
 
         cnt = 0;
@@ -41,10 +42,9 @@ function permutation(depth) {
         ans = Math.max(ans, cnt);
         return;
     }
-    for (let i = depth; i < W; i++) {
-        [walls[i], walls[depth]] = [walls[depth], walls[i]];
-        permutation(depth + 1);
-        [walls[i], walls[depth]] = [walls[depth], walls[i]];
+    for (let i = start; i < W; i++) {
+        selectedWalls[depth] = walls[i];
+        combi(depth + 1, i + 1);
     }
 }
 
