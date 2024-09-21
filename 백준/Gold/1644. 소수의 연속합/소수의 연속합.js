@@ -2,10 +2,16 @@ const path = process.platform === 'linux' ? '/dev/stdin' : 'input.txt';
 const input = require('fs').readFileSync(path).toString().trim();
 
 const N = +input;
-const prime = [2];
+const prime = [];
 
-for (let i = 3; i < N+1; i+=2) {
-    if (isPrime(i)) prime.push(i);
+const visited = Array(N+1).fill(false);
+for (let i = 2; i < N+1; i++) {
+    if (visited[i]) continue;
+    prime.push(i);
+
+    for (let j = 2; i*j < N+1; j++) {
+        visited[i*j] = true;
+    }
 }
 
 const len = prime.length;
@@ -20,10 +26,3 @@ for (let i = 0; i < len; i++) {
     if (sum === N) ans++;
 }
 console.log(ans);
-
-function isPrime(num) {
-    for (let i = 3; i <= Math.floor(num**0.5); i+=2) {
-        if (num%i === 0) return false;
-    }
-    return true;
-}
