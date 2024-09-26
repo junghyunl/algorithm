@@ -7,7 +7,7 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		long N = Long.parseLong(br.readLine());
-		long[] dp = new long[1500000];
+		int[] dp = new int[1500000];
 		dp[1] = 1;
 		dp[2] = 1;
 		for (int i = 3; i < 1500000; i++) {
