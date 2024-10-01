@@ -2,21 +2,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
 public class Main {
-	
-	static int N;
-	static int[] dx = {-1,1};
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		N = Integer.parseInt(st.nextToken());
+		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
 		long K = Long.parseLong(st.nextToken());
 		
@@ -45,29 +41,27 @@ public class Main {
 					check[k][1] = true;
 				}
 			}
-			long ans = prim(list, check);
+			long ans = mst(N, list, check);
 			System.out.println(ans > K ? "NO" : "YES");
 		}
 	}
-	static long prim(List<Node> list, boolean[][] check) {
-		long[] dist = new long[N];
-		Arrays.fill(dist, Long.MAX_VALUE);
+	static long mst(int N, List<Node> list, boolean[][] check) {
+		boolean[] visited = new boolean[N];
+		int[] dx = {-1,1};
 		long totalDist = 0;
 		
 		for (int i = 0; i < N; i++) {
 			Node cur = list.get(i);
 			
-			if (dist[cur.to] < Long.MAX_VALUE) continue;
+			if (visited[cur.to]) continue;
 			totalDist += cur.weight;
-			dist[cur.to] = totalDist;
+			visited[cur.to] = true;
 			
 			for (int j = 0; j < 2; j++) {
 				int x = cur.to;
-				int nx = (x+dx[j]+N)%N;
 				while (!check[x][j]) {
-					dist[nx] = totalDist;
-					x = nx;
-					nx = (nx+dx[j]+N)%N;
+					visited[(x+dx[j]+N)%N] = true;
+					x = (x+dx[j]+N)%N;
 				}
 			}
 		}
