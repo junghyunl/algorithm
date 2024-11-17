@@ -7,12 +7,12 @@ function solution(k, tangerine) {
     }
     
     let arr = Object.values(dict).sort((a,b) => {
-        return b-a;
+        return a-b;
     })
     
     while (k > 0) {
         answer++;
-        k -= arr.shift();
+        k -= arr.pop();
     }
     
     return answer;
