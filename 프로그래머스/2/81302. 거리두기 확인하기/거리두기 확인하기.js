@@ -32,9 +32,7 @@ function solution(places) {
     
     const ans = [];
     
-    places.forEach(map => {
-        ans.push(check(map) ? 1 : 0);
-    })
+    places.forEach(map => ans.push(check(map) ? 1 : 0));
     
     return ans;
 }
