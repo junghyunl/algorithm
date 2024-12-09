@@ -6,5 +6,5 @@ function solution(w, h) {
         return gcd(b, a%b);
     }
     
-    return w*h-Math.max(w,h)-Math.min(w,h)+gcd(w,h);
+    return w*h-w-h+gcd(w,h);
 }
