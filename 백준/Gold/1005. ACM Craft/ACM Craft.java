@@ -1,8 +1,9 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -18,10 +19,11 @@ public class Main {
 			int N = Integer.parseInt(st.nextToken());
 			int K = Integer.parseInt(st.nextToken());
 			
-			int[] time = new int[N+1];
+			int[] buildTime = new int[N+1];
+			int[] totalTime = new int[N+1];
 			st = new StringTokenizer(br.readLine());
 			for (int i = 1; i < N+1; i++) {
-				time[i] = Integer.parseInt(st.nextToken());
+				buildTime[i] = Integer.parseInt(st.nextToken());
 			}
 			
 			ArrayList<Integer>[] adjList = new ArrayList[N+1];
@@ -40,34 +42,29 @@ public class Main {
 			
 			int W =  Integer.parseInt(br.readLine());
 			
-			PriorityQueue<Node> pq = new PriorityQueue<>((a,b) -> Integer.compare(a.totalTime, b.totalTime));
+			Queue<Integer> q = new ArrayDeque<>();
 			for (int i = 1; i < N+1; i++) {
 				if (indegree[i] == 0) {
-					pq.offer(new Node(time[i], i));
+					q.offer(i);
+					totalTime[i] = buildTime[i];
 				}
 			}
 			
-			while (!pq.isEmpty()) {
-				Node cur = pq.poll();
-				if (cur.to == W) {
-					ans.append(cur.totalTime).append("\n");
+			while (!q.isEmpty()) {
+				int cur = q.poll();
+				
+				if (cur == W) {
+					ans.append(totalTime[cur]).append("\n");
 					break;
 				}
 				
-				for (int next : adjList[cur.to]) {
+				for (int next : adjList[cur]) {
 					indegree[next]--;
-					if (indegree[next] == 0) pq.offer(new Node(cur.totalTime+time[next], next));
+					totalTime[next] = Math.max(totalTime[next], totalTime[cur] + buildTime[next]);
+					if (indegree[next] == 0) q.offer(next);
 				}
 			}
 		}
 		System.out.println(ans);
-	}
-	static class Node {
-		int totalTime, to;
-		public Node(int totalTime, int to) {
-			super();
-			this.totalTime = totalTime;
-			this.to = to;
-		}
 	}
 }
