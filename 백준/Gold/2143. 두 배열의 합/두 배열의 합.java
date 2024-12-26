@@ -3,12 +3,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 public class Main {
-	
-	static int N, M;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -30,24 +27,19 @@ public class Main {
 		}
 		
 		Map<Integer, Integer> aMap = new HashMap<>();
-		Map<Integer, Integer> bMap = new HashMap<>();
 		for (int i = 0; i < N; i++) {
 			for (int j = i+1; j < N+1; j++) {
 				int sum = aArr[j] - aArr[i];
 				aMap.put(sum, aMap.containsKey(sum) ? aMap.get(sum) + 1 : 1);
 			}
 		}
+		
+		long ans = 0;
 		for (int i = 0; i < M; i++) {
 			for (int j = i+1; j < M+1; j++) {
 				int sum = bArr[j] - bArr[i];
-				bMap.put(sum, bMap.containsKey(sum) ? bMap.get(sum) + 1 : 1);
+				if (aMap.containsKey(T-sum)) ans += aMap.get(T-sum);
 			}
-		}
-		
-		Set<Integer> aKeys = aMap.keySet();
-		long ans = 0;
-		for (int key : aKeys) {
-			if (bMap.containsKey(T-key)) ans += (long)aMap.get(key) * (long)bMap.get(T-key);
 		}
 		
 		System.out.println(ans);
