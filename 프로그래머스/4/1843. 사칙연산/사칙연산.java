@@ -36,21 +36,15 @@ class Solution {
     static int dfs(int start, int end) {
         if (dp[start][end] > Integer.MIN_VALUE && dp[start][end] < Integer.MAX_VALUE) return dp[start][end];
         
-        int result;
-        
         if (isPlus[start]) {
-            result = Integer.MIN_VALUE;
-            
             for (int i = start; i < end; i++) {
-                result = Math.max(result, isPlus[i+1] ? dfs(start, i) + dfs(i+1, end) : dfs(start, i) - dfs(i+1, end));
+                dp[start][end] = Math.max(dp[start][end], isPlus[i+1] ? dfs(start, i) + dfs(i+1, end) : dfs(start, i) - dfs(i+1, end));
             }
         } else {
-            result = Integer.MAX_VALUE;
-            
             for (int i = start; i < end; i++) {
-                result = Math.min(result, isPlus[i+1] ? dfs(start, i) + dfs(i+1, end) : dfs(start, i) - dfs(i+1, end));
+                dp[start][end] = Math.min(dp[start][end], isPlus[i+1] ? dfs(start, i) + dfs(i+1, end) : dfs(start, i) - dfs(i+1, end));
             }
         }
-        return dp[start][end] = result;
+        return dp[start][end];
     }
 }
