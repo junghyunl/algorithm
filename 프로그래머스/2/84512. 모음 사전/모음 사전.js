@@ -4,13 +4,12 @@ function cnt(n) {
 }
 
 function solution(word) {
-    var answer = 0;
-    let alphabet = ['A', 'E', 'I', 'O', 'U'];
-    let result;
+    let ans = 0;
+    const alphabet = ['A', 'E', 'I', 'O', 'U'];
     
     for (let i = 0; i < word.length; i++) {
-        answer += alphabet.indexOf(word[i]) * cnt(4-i) + 1
+        ans += alphabet.indexOf(word[i]) * cnt(4-i) + 1
     }
     
-    return answer;
+    return ans;
 }
