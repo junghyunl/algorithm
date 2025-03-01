@@ -22,7 +22,6 @@ function solution(cap, n, deliveries, pickups) {
             deliver -= cnt;
             
             while (deliveries[lastDeliverIdx] === 0 && lastDeliverIdx > -1) {
-                deliveries.pop();
                 lastDeliverIdx--;
             }
         }
@@ -33,7 +32,6 @@ function solution(cap, n, deliveries, pickups) {
             pickup -= cnt;
             
             while (pickups[lastPickupIdx] === 0 && lastPickupIdx > -1) {
-                pickups.pop();
                 lastPickupIdx--;
             }
         }
