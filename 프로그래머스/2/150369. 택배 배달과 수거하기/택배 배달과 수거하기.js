@@ -2,12 +2,10 @@ function solution(cap, n, deliveries, pickups) {
     let ans = 0, lastDeliverIdx = n-1, lastPickupIdx = n-1;
     
     while (deliveries[lastDeliverIdx] === 0 && lastDeliverIdx > -1) {
-        deliveries.pop();
         lastDeliverIdx--;
     }
     
     while (pickups[lastPickupIdx] === 0 && lastPickupIdx > -1) {
-        pickups.pop();
         lastPickupIdx--;
     }
     
